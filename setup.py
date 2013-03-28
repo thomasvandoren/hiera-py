@@ -4,16 +4,16 @@
 from setuptools import setup
 
 setup(
-    author ='Thomas Van Doren <thomas.vandoren@gmail.com>',
-    name   ='hiera-py',
-    version='0.0.1',
-    packages=['hiera'],
+    author          ='Thomas Van Doren <thomas.vandoren@gmail.com>',
+    name            ='hiera-py',
+    version         ='0.0.1',
+    packages        =['hiera'],
+    description     ='Python interface for the hiera hierachical database.',
+    long_description=open('README.md').read(),
     install_requires=[
         ],
-    description     ='FIXME',
     entry_points    ={
         'console_scripts': [
-            'hiera-py=hiera.client:HieraClient.cli',
             ],
         },
     )
