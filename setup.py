@@ -9,7 +9,7 @@ setup(
     version         ='0.0.1',
     packages        =['hiera'],
     description     ='Python interface for the hiera hierachical database.',
-    long_description=open('README.md').read(),
+    long_description=open('README.md', 'r').read(),
     install_requires=[
         ],
     entry_points    ={
