@@ -6,6 +6,7 @@
 from   __future__ import print_function, unicode_literals
 
 import mock
+import subprocess
 import unittest
 import uuid
 
@@ -62,22 +63,53 @@ class HieraClientTests(unittest.TestCase):
         h = self.create_client('my-config.yml')
         self.assertIsNotNone(str(h))
 
-    def test_hiera(self):
+    @mock.patch.object(hiera.HieraClient, '_command')
+    @mock.patch('subprocess.check_output')
+    def test_hiera(self, mock_sub, mock_command):
         """Verify hiera returns output of subprocess command when successful."""
-        self.fail('no')
+        h = self.create_client('my-config.yml')
+        mock_sub.return_value = 'some-value'
 
-    def test_hiera__whitespace(self):
+        actual_value = h._hiera('some-key')
+
+        self.assertEqual('some-value', actual_value)
+        mock_sub.assert_called_once_with(mock_command.return_value,
+                                         stderr=subprocess.STDOUT)
+
+    @mock.patch('subprocess.check_output')
+    def test_hiera__whitespace(self, mock_sub):
         """Verify hiera strips whitespace from suprocess output when successful."""
-        self.fail('no')
+        h = self.create_client('my-config.yml')
+        mock_sub.return_value = '  \t\n\r\nsome-value   '
 
-    def test_hiera__missing_hiera(self):
+        actual_value = h._hiera('some-key')
+
+        self.assertEqual('some-value', actual_value)
+
+    @mock.patch('subprocess.check_output')
+    def test_hiera__missing_hiera(self, mock_sub):
         """Verify HieraNotFoundError is raised when hiera binary is not found."""
-        self.fail('no')
+        h = self.create_client('my-config.yml')
+        mock_sub.side_effect = OSError('kaboom!')
 
-    def test_hiera__failed(self):
+        with self.assertRaises(hiera.exc.HieraNotFoundError):
+            h._hiera('some-key')
+
+    @mock.patch('subprocess.check_output')
+    def test_hiera__failed(self, mock_sub):
         """Verify HieraError raised when hiera subprocess command fails."""
-        self.fail('no')
+        h = self.create_client('my-config.yml')
+        mock_sub.side_effect = subprocess.CalledProcessError('kaboom!')
 
-    def test_hiera__empty(self):
+        with self.assertRaises(hiera.exc.HieraError):
+            h._hiera('some-key')
+
+    @mock.patch('subprocess.check_output')
+    def test_hiera__empty(self, mock_sub):
         """Verify None is returned when hiera output is empty string."""
-        self.fail('no')
+        h = self.create_client('my-config.yml')
+        mock_sub.return_value = ''
+
+        actual_value = h._hiera('some-key')
+
+        self.assertIsNone(actual_value)
