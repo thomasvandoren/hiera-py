@@ -99,7 +99,8 @@ class HieraClientTests(unittest.TestCase):
     def test_hiera__failed(self, mock_sub):
         """Verify HieraError raised when hiera subprocess command fails."""
         h = self.create_client('my-config.yml')
-        mock_sub.side_effect = subprocess.CalledProcessError('kaboom!')
+        mock_sub.side_effect = subprocess.CalledProcessError(
+            1, ['command here'], output=None)
 
         with self.assertRaises(hiera.exc.HieraError):
             h._hiera('some-key')
