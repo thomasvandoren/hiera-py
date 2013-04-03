@@ -114,3 +114,25 @@ class HieraClientTests(unittest.TestCase):
         actual_value = h._hiera('some-key')
 
         self.assertIsNone(actual_value)
+
+    def test_command(self):
+        """Verify command returns expected list."""
+        h = self.create_client('my-config.yml')
+        expected_command = ['hiera', '--config', 'my-config.yml', 'some-key']
+
+        actual_command = h._command('some-key')
+
+        self.assertEqual(expected_command, actual_command)
+
+    def test_command__environment(self):
+        """Verify command includes environment list."""
+        env = {'environment': 'unittest',
+               'fqdn'       : 'ima-superstar',
+               }
+        h = self.create_client('my-config.yml', **env)
+        expected_command = ['hiera', '--config', 'my-config.yml', 'some-key',
+                            'environment=unittest', 'fqdn=ima-superstar']
+
+        actual_command = h._command('some-key')
+
+        self.assertEqual(expected_command, actual_command)

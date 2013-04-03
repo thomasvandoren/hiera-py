@@ -53,7 +53,7 @@ class HieraClient(object):
         cmd = [self.hiera_binary,
                '--config', self.config_filename,
                key_name]
-        cmd.extend(map(lambda *env_var: '='.join(env_var),
+        cmd.extend(map(lambda *env_var: '='.join(*env_var),
                        self.environment.iteritems()))
         return cmd
 
@@ -66,6 +66,9 @@ class HieraClient(object):
         Raises HieraError if the key does not exist or there was an error
         invoking hiera. Raises HieraNotFoundError if the hiera CLI binary could
         not be found.
+
+        :param key_name: string key
+        :rtype: :type:`str` value for key or None
         """
         hiera_command = self._command(key_name)
         output = None
