@@ -14,9 +14,13 @@ import hiera
 class HieraClientTests(unittest.TestCase):
     __doc__
 
-    def test_init(self):
+    @mock.patch.object(hiera.HieraClient, '_validate')
+    def test_init(self, mock_validate):
         """Verify init with default params is successful."""
-        self.fail('no')
+        h = hiera.HieraClient('my-config.yml')
+        self.assertEqual('my-config.yml', h.config_filename)
+        self.assertEqual('hiera', h.hiera_binary)
+        self.assertEqual({}, h.environment)
 
     def test_init__environment(self):
         """Verify init stores all extra keyword arguments as environment variables."""

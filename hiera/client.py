@@ -37,7 +37,7 @@ class HieraClient(object):
 
     def __repr__(self):
         """String representations of Hiera instance."""
-        params_string = ', '.join(map(lambda k: '='.join((k, getattr(self, k, None))),
+        params_string = ', '.join(map(lambda k: '{0}={1}'.format(k, getattr(self, k, None)),
                                       ['config_filename', 'hiera_binary', 'environment']))
         return '{0}({1})'.format(self.__class__.__name__, params_string)
 
