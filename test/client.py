@@ -41,7 +41,15 @@ class HieraClientTests(unittest.TestCase):
 
     def test_init__environment(self):
         """Verify init stores all extra keyword arguments as environment variables."""
-        self.fail('no')
+        expected_env = {'environment': 'unittest',
+                        'host'       : 'ima-superstar',
+                        'random_key' : 'these-flashing-lights-are-bright!',
+                        }
+        h = self.create_client('my-config.yml',
+                               environment='unittest',
+                               host='ima-superstar',
+                               random_key='these-flashing-lights-are-bright!')
+        self.assertEqual(expected_env, h.environment)
 
     def test_init__nonexistent_config(self):
         """Verify HieraError is raised when config file does not exist."""
