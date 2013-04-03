@@ -2,13 +2,36 @@ hiera-py
 ========
 Python interface for the hiera hierarchical database.
 
+See the
+[documentation on puppetlabs.com](http://docs.puppetlabs.com/hiera/latest/) for
+more detail.
+
 Installation
 ------------
-FIXME!
+
+```bash
+pip install hiera-py
+
+# Or, if you prefer easy_install:
+easy_install hiera-py
+
+# Or, if you prefer to install from source:
+python setup.py install
+```
 
 Getting Started
 ---------------
-FIXME!
+
+```python
+>>> import hiera
+>>> hiera_client = hiera.HieraClient('/etc/hiera.yml', environment='dev')
+>>> hiera_client.get('my_key')
+'my_value'
+>>> hiera_client.get('nonexistent_key')
+Traceback (most recent call last):
+...
+hiera.exc.HieraError: Failed to retrieve key nonexistent_key. ...
+```
 
 License
 -------
