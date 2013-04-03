@@ -90,5 +90,5 @@ class HieraClient(object):
         found.
         """
         if not os.path.isfile(self.config_filename):
-            raise HieraError('Hiera configuration file does not exist at: {0}'.format(
-                    self.config_filename))
+            raise hiera.exc.HieraError('Hiera configuration file does not exist '
+                                       'at: {0}'.format(self.config_filename))

@@ -7,17 +7,34 @@ from   __future__ import print_function, unicode_literals
 
 import mock
 import unittest
+import uuid
 
 import hiera
+import hiera.exc
 
 
 class HieraClientTests(unittest.TestCase):
     __doc__
 
-    @mock.patch.object(hiera.HieraClient, '_validate')
-    def test_init(self, mock_validate):
+    def create_client(self, *args, **kwargs):
+        """Helper to create a new hiera client.
+
+        By default, patches _validate function so a non-existent config file may
+        be used.
+
+        :param patch_validate: bool optional switch to enable _validate patching
+        :rtype: :class:`hiera.HieraClient`
+        """
+        patch_validate = kwargs.pop('patch_validate', True)
+        if patch_validate:
+            with mock.patch.object(hiera.HieraClient, '_validate'):
+                return hiera.HieraClient(*args, **kwargs)
+        else:
+            return hiera.HieraClient(*args, **kwargs)
+
+    def test_init(self):
         """Verify init with default params is successful."""
-        h = hiera.HieraClient('my-config.yml')
+        h = self.create_client('my-config.yml')
         self.assertEqual('my-config.yml', h.config_filename)
         self.assertEqual('hiera', h.hiera_binary)
         self.assertEqual({}, h.environment)
@@ -28,11 +45,14 @@ class HieraClientTests(unittest.TestCase):
 
     def test_init__nonexistent_config(self):
         """Verify HieraError is raised when config file does not exist."""
-        self.fail('no')
+        with self.assertRaises(hiera.exc.HieraError):
+            self.create_client('/path/to/a/fake/config/{0}'.format(uuid.uuid4()),
+                               patch_validate=False)
 
     def test_repr(self):
         """Simple smoke test that verifies __repr__ is not busted."""
-        self.fail('no')
+        h = self.create_client('my-config.yml')
+        self.assertIsNotNone(str(h))
 
     def test_hiera(self):
         """Verify hiera returns output of subprocess command when successful."""
