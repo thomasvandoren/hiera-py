@@ -3,7 +3,7 @@
 
 """Verify hiera.HieraClient class."""
 
-from   __future__ import print_function, unicode_literals
+from __future__ import print_function, unicode_literals
 
 import mock
 import subprocess
@@ -20,10 +20,10 @@ class HieraClientTests(unittest.TestCase):
     def create_client(self, *args, **kwargs):
         """Helper to create a new hiera client.
 
-        By default, patches _validate function so a non-existent config file may
-        be used.
+        By default, patches _validate function so a non-existent config file
+        may be used.
 
-        :param patch_validate: bool optional switch to enable _validate patching
+        :param patch_validate: bool optional switch to enable _validate patch
         :rtype: :class:`hiera.HieraClient`
         """
         patch_validate = kwargs.pop('patch_validate', True)
@@ -41,10 +41,12 @@ class HieraClientTests(unittest.TestCase):
         self.assertEqual({}, h.environment)
 
     def test_init__environment(self):
-        """Verify init stores all extra keyword arguments as environment variables."""
+        """Verify init stores all extra keyword arguments as environment
+        variables.
+        """
         expected_env = {'environment': 'unittest',
-                        'host'       : 'ima-superstar',
-                        'random_key' : 'these-flashing-lights-are-bright!',
+                        'host':        'ima-superstar',
+                        'random_key':  'these-flashing-lights-are-bright!',
                         }
         h = self.create_client('my-config.yml',
                                environment='unittest',
@@ -55,8 +57,9 @@ class HieraClientTests(unittest.TestCase):
     def test_init__nonexistent_config(self):
         """Verify HieraError is raised when config file does not exist."""
         with self.assertRaises(hiera.exc.HieraError):
-            self.create_client('/path/to/a/fake/config/{0}'.format(uuid.uuid4()),
-                               patch_validate=False)
+            self.create_client(
+                '/path/to/a/fake/config/{0}'.format(uuid.uuid4()),
+                patch_validate=False)
 
     def test_repr(self):
         """Simple smoke test that verifies __repr__ is not busted."""
@@ -66,7 +69,9 @@ class HieraClientTests(unittest.TestCase):
     @mock.patch.object(hiera.HieraClient, '_command')
     @mock.patch('subprocess.check_output')
     def test_hiera(self, mock_sub, mock_command):
-        """Verify hiera returns output of subprocess command when successful."""
+        """Verify hiera returns output of subprocess command when
+        successful.
+        """
         h = self.create_client('my-config.yml')
         mock_sub.return_value = 'some-value'
 
@@ -78,7 +83,9 @@ class HieraClientTests(unittest.TestCase):
 
     @mock.patch('subprocess.check_output')
     def test_hiera__whitespace(self, mock_sub):
-        """Verify hiera strips whitespace from suprocess output when successful."""
+        """Verify hiera strips whitespace from suprocess output when
+        successful.
+        """
         h = self.create_client('my-config.yml')
         mock_sub.return_value = '  \t\n\r\nsome-value   '
 
@@ -88,7 +95,9 @@ class HieraClientTests(unittest.TestCase):
 
     @mock.patch('subprocess.check_output')
     def test_hiera__missing_hiera(self, mock_sub):
-        """Verify HieraNotFoundError is raised when hiera binary is not found."""
+        """Verify HieraNotFoundError is raised when hiera binary is not
+        found.
+        """
         h = self.create_client('my-config.yml')
         mock_sub.side_effect = OSError('kaboom!')
 
@@ -127,7 +136,7 @@ class HieraClientTests(unittest.TestCase):
     def test_command__environment(self):
         """Verify command includes environment list."""
         env = {'environment': 'unittest',
-               'fqdn'       : 'ima-superstar',
+               'fqdn':        'ima-superstar',
                }
         h = self.create_client('my-config.yml', **env)
         expected_command = ['hiera', '--config', 'my-config.yml', 'some-key',

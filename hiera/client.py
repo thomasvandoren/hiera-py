@@ -3,7 +3,7 @@
 
 """Python client for Hiera hierachical database."""
 
-from   __future__ import print_function, unicode_literals
+from __future__ import print_function, unicode_literals
 
 import logging
 import os.path
@@ -23,7 +23,8 @@ class HieraClient(object):
         osfamily='Debian') as keyword args to __init__ would result in hiera
         calls like this:
 
-          hiera --config <config_filename> <key> environment=developer osfamily=Debian
+          hiera --config <config_filename> <key> environment=developer \
+            osfamily=Debian
 
         :param config_filename: Path to the hiera configuration file.
         :param hiera_binary: Path to the hiera binary. Defaults to 'hiera'.
@@ -37,8 +38,9 @@ class HieraClient(object):
 
     def __repr__(self):
         """String representations of Hiera instance."""
-        params_string = ', '.join(map(lambda k: '{0}={1}'.format(k, getattr(self, k, None)),
-                                      ['config_filename', 'hiera_binary', 'environment']))
+        params_list = map(lambda k: '='.join(*(k, getattr(self, k, None))),
+                          ['config_filename', 'hiera_binary', 'environment'])
+        params_string = ', '.join(params_list)
         return '{0}({1})'.format(self.__class__.__name__, params_string)
 
     def get(self, key_name):
@@ -46,7 +48,8 @@ class HieraClient(object):
         return self._hiera(key_name)
 
     def _command(self, key_name):
-        """Returns a hiera command list that is suitable for passing to subprocess calls.
+        """Returns a hiera command list that is suitable for passing to
+        subprocess calls.
 
         :param key_name:
         """
@@ -73,13 +76,16 @@ class HieraClient(object):
         hiera_command = self._command(key_name)
         output = None
         try:
-            output = subprocess.check_output(hiera_command, stderr=subprocess.STDOUT)
+            output = subprocess.check_output(
+                hiera_command, stderr=subprocess.STDOUT)
         except OSError as ex:
             raise hiera.exc.HieraNotFoundError(
-                'Could not find hiera binary at: {0}'.format(self.hiera_binary))
+                'Could not find hiera binary at: {0}'.format(
+                    self.hiera_binary))
         except subprocess.CalledProcessError as ex:
-            raise hiera.exc.HieraError('Failed to retrieve key {0}. exit code: {1} '
-                                       'message: {2} console output: {3}'.format(
+            raise hiera.exc.HieraError(
+                'Failed to retrieve key {0}. exit code: {1} '
+                'message: {2} console output: {3}'.format(
                     key_name, ex.returncode, ex.message, ex.output))
         else:
             value = output.strip()
@@ -93,5 +99,6 @@ class HieraClient(object):
         found.
         """
         if not os.path.isfile(self.config_filename):
-            raise hiera.exc.HieraError('Hiera configuration file does not exist '
-                                       'at: {0}'.format(self.config_filename))
+            raise hiera.exc.HieraError(
+                'Hiera configuration file does not exist '
+                'at: {0}'.format(self.config_filename))

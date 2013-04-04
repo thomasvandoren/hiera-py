@@ -3,7 +3,7 @@
 
 """Exceptions for specific hiera issues."""
 
-from   __future__ import print_function, unicode_literals
+from __future__ import print_function, unicode_literals
 
 
 class HieraError(Exception):
