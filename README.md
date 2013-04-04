@@ -19,6 +19,13 @@ easy_install hiera-py
 python setup.py install
 ```
 
+### Supported python versions
+
+* 2.7
+* PyPy
+
+Eventually, I would like to support 3.x and 2.6+.
+
 Getting Started
 ---------------
 
