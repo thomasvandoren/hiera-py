@@ -52,5 +52,5 @@ tox
 tox -e cover
 
 # Run the tests against a bunch of python versions.
-tox -e py26,py27,py32,py33,pypy
+tox -e py25,py26,py27,py31,py32,py33,pypy
 ```
