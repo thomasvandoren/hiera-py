@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+from hiera import __version__
 
 setup(
     name            ='hiera-py',
-    version         ='0.0.1',
+    version         =__version__,
     description     ='Python interface for the hiera hierachical database.',
     long_description=open('README.rst', 'r').read(),
     author          ='Thomas Van Doren',
