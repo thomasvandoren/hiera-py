@@ -13,7 +13,7 @@ setup(
     author_email    ='thomas@thomasvandoren.com',
     maintainer      ='Thomas Van Doren',
     maintainer_email='thomas@thomasvandoren.com',
-    url             ='http://thomasvandoren.github.com/hiera-py',
+    url             ='https://hiera-py.readthedocs.org/',
     keywords        =['hiera'],
     license         ='BSD',
     packages        =['hiera'],
