@@ -11,9 +11,11 @@ import subprocess
 
 import hiera.exc
 
+__all__ = ('HieraClient',)
+
 
 class HieraClient(object):
-    __doc__
+    __doc__ = __doc__
 
     def __init__(self, config_filename, hiera_binary='hiera', **kwargs):
         """Create a new instance with the given settings.
@@ -50,7 +52,18 @@ class HieraClient(object):
         return '{0}({1})'.format(self.__class__.__name__, params_string)
 
     def get(self, key_name):
-        """Request the given key from hiera."""
+        """Request the given key from hiera.
+
+        Returns the string version of the key when successful.
+
+        Raises :class:`hiera.exc.HieraError` if the key does not exist or there
+        was an error invoking hiera. Raises
+        :class:`hiera.exc.HieraNotFoundError` if the hiera CLI binary could not
+        be found.
+
+        :param key_name: string key
+        :rtype: str value for key or None
+        """
         return self._hiera(key_name)
 
     def _command(self, key_name):
@@ -58,6 +71,7 @@ class HieraClient(object):
         subprocess calls.
 
         :param key_name:
+        :rtype: list that is hiera command
         """
         cmd = [self.hiera_binary,
                '--config', self.config_filename,
@@ -77,7 +91,7 @@ class HieraClient(object):
         not be found.
 
         :param key_name: string key
-        :rtype: :type:`str` value for key or None
+        :rtype: str value for key or None
         """
         hiera_command = self._command(key_name)
         output = None
