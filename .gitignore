@@ -41,3 +41,6 @@ nosetests.xml
 *~
 \#*#
 .#*
+
+# Docs stuff.
+/docs/_build
