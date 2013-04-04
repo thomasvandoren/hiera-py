@@ -2,4 +2,6 @@
 mock
 nose
 nosexcover
+pep8
+pyflakes
 tox
