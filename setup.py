@@ -4,16 +4,23 @@
 from setuptools import setup
 
 setup(
-    author          ='Thomas Van Doren <thomas.vandoren@gmail.com>',
     name            ='hiera-py',
     version         ='0.0.1',
-    packages        =['hiera'],
     description     ='Python interface for the hiera hierachical database.',
     long_description=open('README.md', 'r').read(),
-    install_requires=[
+    author          ='Thomas Van Doren',
+    author_email    ='thomas@thomasvandoren.com',
+    maintainer      ='Thomas Van Doren',
+    maintainer_email='thomas@thomasvandoren.com',
+    keywords        =['hiera'],
+    license         ='BSD',
+    packages        =['hiera'],
+    classifiers     =[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
         ],
-    entry_points    ={
-        'console_scripts': [
-            ],
-        },
     )
