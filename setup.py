@@ -7,7 +7,7 @@ setup(
     name            ='hiera-py',
     version         ='0.0.1',
     description     ='Python interface for the hiera hierachical database.',
-    long_description=open('README.md', 'r').read(),
+    long_description=open('README.rst', 'r').read(),
     author          ='Thomas Van Doren',
     author_email    ='thomas@thomasvandoren.com',
     maintainer      ='Thomas Van Doren',
