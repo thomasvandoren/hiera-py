@@ -38,7 +38,13 @@ class HieraClient(object):
 
     def __repr__(self):
         """String representations of Hiera instance."""
-        params_list = map(lambda k: '='.join(*(k, getattr(self, k, None))),
+        def kv_str(key):
+            """Takes an instance attribute and returns a string like:
+            'key=value'
+            """
+            return '='.join((key, repr(getattr(self, key, None))))
+
+        params_list = map(kv_str,
                           ['config_filename', 'hiera_binary', 'environment'])
         params_string = ', '.join(params_list)
         return '{0}({1})'.format(self.__class__.__name__, params_string)
